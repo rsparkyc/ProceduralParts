@@ -323,7 +323,11 @@ namespace ProceduralParts
                     break;
             }
 
+
+			Debug.Log("[TEST] Finding model transform for " + srbBellName);
             bellTransform = part.FindModelTransform(srbBellName);
+			Debug.Log("[TEST] Position on InitializeBells");
+			LogVector3(bellTransform.position, "position");
             thrustTransform = bellTransform.Find(thrustVectorTransformName);
 
 
@@ -419,9 +423,12 @@ namespace ProceduralParts
             ProceduralPart pPart = GetComponent<ProceduralPart>();
             if (pPart != null)
             {
-                // Attach the bell. In the config file this isn't in normalized position, move it into normalized position first.
-                //print("*PP* Setting bell position: " + pPart.transform.TransformPoint(0, -0.5f, 0));
+				// Attach the bell. In the config file this isn't in normalized position, move it into normalized position first.
+				//print("*PP* Setting bell position: " + pPart.transform.TransformPoint(0, -0.5f, 0));
+				Debug.Log("[TEST] Updating Bell position");
+				LogVector3(bellTransform.position, "was");
                 bellTransform.position = pPart.transform.TransformPoint(0, -0.5f, 0);
+				LogVector3(bellTransform.position, "is");
 
                 pPart.AddAttachment(bellTransform, true);
 
@@ -440,7 +447,20 @@ namespace ProceduralParts
             thrustTransform.position = selectedBell.srbAttach.position;
         }
 
-        private Vector3 GetOffset()
+		private void LogVector3(Vector3 vector3, string name)
+		{
+			if (vector3 == null) {
+				Debug.Log("[TEST] " + name + ": null");
+			}
+			else {
+				Debug.Log("[TEST] " + name + ": (" +
+					vector3.x + ", " +
+					vector3.y + ", " +
+					vector3.z + ")");
+			}
+		}
+
+		private Vector3 GetOffset()
         {
             return selectedBell.srbAttach.position - selectedBell.model.position;
         }
